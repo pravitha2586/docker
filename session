@@ -114,6 +114,9 @@ docker pull centos
 docker images
 17.	How run the instant commands directly to one image
 docker run busybox ping google.com
+or 
+docker run nginx ping google.com
+
 18.	Run ping command in 2 image and explain the difference
 a.	Download httpd image and run ping command
 docker run httpd ping google.com
@@ -124,11 +127,15 @@ docker run busybox ping google.com
 publish webserver ngnix in port 80
 
 docker container run --publish 80:80 nginx
+Try the IP URL in a browser
 
+Then try with 8081
+docker container run --publish 80:80 nginx
 *********************************************************
 publish webserver ngnix in port 80 --> run in background permanently
 
 docker container run --publish 80:80 --detach nginx
+docker container run --publish 8081:80 --detach nginx
 
 *********************************************************
 
@@ -164,6 +171,8 @@ remove:
   
   docker run -dit --name cloudnloud-web -p 8087:80 -v /var/tmp/:/usr/local/apache2/htdocs/ httpd:2.4
   
+  -p port
+  
   8080 port --> base linux machine port
 80 --> docker image port
 /var/tmp/ --> base linux machine directory
@@ -194,16 +203,22 @@ docker run -d -P --name web httpd
 docker ps -a
 
 to test ----> http://35.224.243.205:32769/
+The default dynamiuc port starts from 32769
+
 
 **************************************************************************************************************
 
 Containers logs can be stored in base docker engine machine
 /var/lib/containerd/logs/
 
+
+/var/lib/docker/containers
+
 *****************************************************
 To stop any running container
 
 docker stop $(docker ps -q)  
+$ -> the for looop to delete one by one container
 
 *********************************************************
 To remove all the containers
@@ -215,6 +230,8 @@ docker rm $(docker ps -a -q)
 To remove all docker images in a single command,
 [root@docker-host ~]# docker rmi $(docker images -a -q)
 
+If few images are still used then use the command with - force
+[root@docker-host ~]# docker rmi $(docker images -a -q) -force
 *********************************************************************
 
 what is dangling images
@@ -249,7 +266,7 @@ You can find all the containers that match a pattern using a combination of dock
 
 List:
 
-docker ps -a |  grep "pattern”
+docker ps -a |  grep "pattern"
 
 Remove:
 
